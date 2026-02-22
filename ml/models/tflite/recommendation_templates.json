@@ -1,0 +1,93 @@
+{
+  "risk_levels": {
+    "healthy": {
+      "title": "Great Financial Health",
+      "description": "You're saving well! Here are ways to optimize further.",
+      "icon": "emoji_events"
+    },
+    "moderate": {
+      "title": "Room for Improvement",
+      "description": "Your spending is manageable, but you could save more.",
+      "icon": "trending_up"
+    },
+    "at_risk": {
+      "title": "Action Needed",
+      "description": "Your expenses are close to or exceeding your income.",
+      "icon": "warning"
+    }
+  },
+  "rules": [
+    {
+      "id": "high_dining",
+      "title": "Reduce Dining Expenses",
+      "description": "Dining makes up {ratio}% of your spending. Try meal prepping to cut costs by 30-50%.",
+      "category": "dining",
+      "threshold": 0.15,
+      "priority": "high",
+      "potential_savings": 0.3
+    },
+    {
+      "id": "high_entertainment",
+      "title": "Optimize Entertainment Budget",
+      "description": "Entertainment is {ratio}% of spending. Consider free alternatives or shared subscriptions.",
+      "category": "entertainment",
+      "threshold": 0.1,
+      "priority": "medium",
+      "potential_savings": 0.25
+    },
+    {
+      "id": "high_shopping",
+      "title": "Curb Shopping Spending",
+      "description": "Shopping is {ratio}% of your expenses. Try a 24-hour rule before non-essential purchases.",
+      "category": "shopping",
+      "threshold": 0.2,
+      "priority": "high",
+      "potential_savings": 0.35
+    },
+    {
+      "id": "high_transport",
+      "title": "Lower Transport Costs",
+      "description": "Transport is {ratio}% of spending. Consider carpooling, public transit, or biking.",
+      "category": "transport",
+      "threshold": 0.15,
+      "priority": "medium",
+      "potential_savings": 0.2
+    },
+    {
+      "id": "high_groceries",
+      "title": "Optimize Grocery Budget",
+      "description": "Groceries are {ratio}% of spending. Plan meals, buy in bulk, and use coupons.",
+      "category": "groceries",
+      "threshold": 0.25,
+      "priority": "medium",
+      "potential_savings": 0.15
+    },
+    {
+      "id": "no_savings",
+      "title": "Start an Emergency Fund",
+      "description": "You're saving less than 5%. Aim to save at least 10% of income as a safety net.",
+      "category": null,
+      "threshold": 0.05,
+      "priority": "critical",
+      "potential_savings": null
+    },
+    {
+      "id": "spending_increase",
+      "title": "Spending Increased Significantly",
+      "description": "Your spending increased {increase}% from last month. Review recent purchases for non-essentials.",
+      "category": null,
+      "threshold": 0.2,
+      "priority": "high",
+      "potential_savings": null
+    },
+    {
+      "id": "high_utilities",
+      "title": "Reduce Utility Bills",
+      "description": "Utilities are {ratio}% of spending. Check for better plans, reduce usage, or switch providers.",
+      "category": "utilities",
+      "threshold": 0.12,
+      "priority": "low",
+      "potential_savings": 0.1
+    }
+  ]
+}

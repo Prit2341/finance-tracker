@@ -1,0 +1,105 @@
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#4F46E5', 'primaryTextColor': '#fff', 'primaryBorderColor': '#3730A3', 'lineColor': '#6366F1', 'secondaryColor': '#E0E7FF', 'tertiaryColor': '#F5F3FF'}}}%%
+
+flowchart TB
+    subgraph INITIAL["🚀 INITIAL SETUP (One-time in Python)"]
+        direction TB
+        A1[📊 Public Datasets<br/>Kaggle Financial Data] --> A2[🧹 Data Preprocessing<br/>& Feature Engineering]
+        A2 --> A3[🏋️ Train Base Models<br/>TensorFlow/Keras]
+        A3 --> A4[📉 Evaluate & Optimize<br/>Accuracy, F1, MAPE]
+        A4 --> A5[📦 Convert to TFLite<br/>+ Quantization INT8]
+        A5 --> A6[📱 Ship with App<br/>base_model.tflite]
+    end
+
+    subgraph FLUTTER["📱 FLUTTER APP LAYER"]
+        direction TB
+        B1[(Local Database<br/>SQLite/Hive)]
+        B2[TFLite Interpreter]
+        B3[Training Data Buffer]
+        B4[Model Manager]
+        B5[UI Components]
+    end
+
+    subgraph DAILY_USE["👤 DAILY USER FLOW"]
+        direction TB
+        C1[User Opens App] --> C2[Add New Transaction]
+        C2 --> C3[Enter Amount +<br/>Merchant Name]
+        C3 --> C4{Model Predicts<br/>Category}
+        C4 -->|"Confident ≥80%"| C5[Auto-assign Category]
+        C4 -->|"Uncertain <80%"| C6[Show Top 3 Suggestions]
+        C6 --> C7[User Selects/Corrects]
+        C5 --> C8[Save Transaction]
+        C7 --> C8
+    end
+
+    subgraph FEEDBACK["🔄 FEEDBACK COLLECTION"]
+        direction TB
+        D1[Transaction Saved] --> D2{Was it corrected?}
+        D2 -->|Yes| D3[Strong Training Signal<br/>weight: 1.0]
+        D2 -->|No, auto-assigned| D4[Weak Training Signal<br/>weight: 0.5]
+        D3 --> D5[Add to Training Buffer]
+        D4 --> D5
+        D5 --> D6[Increment Counter]
+    end
+
+    subgraph RETRAIN["🧠 ON-DEVICE RETRAINING (Every 50 Transactions)"]
+        direction TB
+        E1{Counter ≥ 50?} -->|No| E2[Continue Collecting]
+        E1 -->|Yes| E3[Trigger Background Training]
+        E3 --> E4[Load Current Model Weights]
+        E4 --> E5[Prepare Mini-batches<br/>from Training Buffer]
+        E5 --> E6[Fine-tune Top Layers<br/>Freeze Base Layers]
+        E6 --> E7[Validate on Holdout Set<br/>Last 10 transactions]
+        E7 --> E8{New Model<br/>Better?}
+        E8 -->|Yes| E9[Replace Model<br/>Save new .tflite]
+        E8 -->|No| E10[Keep Old Model<br/>Log for Analysis]
+        E9 --> E11[Reset Counter]
+        E10 --> E11
+        E11 --> E12[Clear Old Training Buffer]
+    end
+
+    subgraph MODELS["🤖 ML MODELS (All TFLite)"]
+        direction LR
+        F1[📝 Auto-Categorizer<br/>LSTM/Transformer]
+        F2[⚠️ Anomaly Detector<br/>Autoencoder]
+        F3[📈 Spending Forecast<br/>LSTM Time Series]
+        F4[💡 Savings Advisor<br/>Decision Tree]
+    end
+
+    subgraph OUTPUTS["✨ PERSONALIZED OUTPUTS"]
+        direction TB
+        G1[🏷️ Smart Categories<br/>Learns YOUR merchants]
+        G2[⚠️ Personal Anomalies<br/>YOUR spending baseline]
+        G3[📊 Accurate Forecasts<br/>YOUR patterns]
+        G4[💰 Relevant Tips<br/>YOUR habits]
+    end
+
+    %% Connections
+    A6 -.->|"Bundle with APK"| B2
+    C3 --> B2
+    B2 --> C4
+    C8 --> B1
+    C8 --> D1
+    D6 --> B3
+    B3 --> E1
+    E3 --> B4
+    B4 --> B2
+    E9 --> B4
+
+    %% Model to Output connections
+    F1 --> G1
+    F2 --> G2
+    F3 --> G3
+    F4 --> G4
+
+    B1 -->|"Historical Data"| F2
+    B1 -->|"Time Series"| F3
+    B1 -->|"Spending Patterns"| F4
+
+    %% Styling
+    style INITIAL fill:#FCE7F3,stroke:#DB2777
+    style FLUTTER fill:#D1FAE5,stroke:#059669
+    style DAILY_USE fill:#DBEAFE,stroke:#2563EB
+    style FEEDBACK fill:#FEF3C7,stroke:#D97706
+    style RETRAIN fill:#E0E7FF,stroke:#4F46E5
+    style MODELS fill:#F3E8FF,stroke:#9333EA
+    style OUTPUTS fill:#DCFCE7,stroke:#16A34A

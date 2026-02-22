@@ -1,0 +1,35 @@
+{
+  "input_dim": 5,
+  "num_classes": 3,
+  "risk_labels": [
+    "healthy",
+    "moderate",
+    "at_risk"
+  ],
+  "feature_names": [
+    "expense_ratio",
+    "savings_rate",
+    "discretionary_ratio",
+    "essential_ratio",
+    "credit_util"
+  ],
+  "scaler": {
+    "mean": [
+      0.5999973225822895,
+      0.40000267783793486,
+      0.23999892897161992,
+      0.35999839332027533,
+      0.31592351284761766
+    ],
+    "std": [
+      0.17368351631074444,
+      0.17368351634327714,
+      0.06947340653821912,
+      0.10421010977665333,
+      0.4345041905124239
+    ]
+  },
+  "metrics": {
+    "accuracy": 0.9981495759444873
+  }
+}

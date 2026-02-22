@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(flutter --version:*)",
+      "Bash(git init:*)",
+      "Bash(flutter create:*)",
+      "Bash(flutter pub get:*)",
+      "Bash(dart analyze:*)",
+      "Bash(python3:*)",
+      "Bash(PYTHONIOENCODING=utf-8 cat:*)",
+      "Bash(test:*)",
+      "Bash(flutter run:*)",
+      "Bash(source:*)",
+      "Bash(python ml/run_all_notebooks.py:*)",
+      "Bash(TF_CPP_MIN_LOG_LEVEL=2 python:*)",
+      "Bash(python:*)",
+      "Bash(xxd:*)",
+      "Bash(flutter pub add:*)",
+      "Bash(flutter build:*)",
+      "Bash(flutter devices:*)"
+    ]
+  }
+}

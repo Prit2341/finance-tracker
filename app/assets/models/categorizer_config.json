@@ -1,0 +1,24 @@
+{
+  "vocab_size": 2000,
+  "max_len": 10,
+  "num_classes": 12,
+  "categories": [
+    "groceries",
+    "dining",
+    "transport",
+    "utilities",
+    "entertainment",
+    "healthcare",
+    "shopping",
+    "rent",
+    "salary",
+    "freelance",
+    "transfer",
+    "other"
+  ],
+  "confidence_threshold": 0.8,
+  "metrics": {
+    "accuracy": 0.9875,
+    "f1_weighted": 0.987519650470081
+  }
+}

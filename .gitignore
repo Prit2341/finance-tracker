@@ -1,0 +1,59 @@
+# ─── Python / ML ─────────────────────────────────────────────────────────────
+venv/
+__pycache__/
+*.pyc
+*.pyo
+.ipynb_checkpoints/
+
+# ML data and models (large files)
+ml/data/
+ml/models/saved/
+ml/models/tflite/*.tflite
+dataset/
+
+# ─── Flutter / Dart ───────────────────────────────────────────────────────────
+app/.dart_tool/
+app/build/
+app/.flutter-plugins
+app/.flutter-plugins-dependencies
+app/.packages
+app/.metadata
+
+# Android
+app/android/.gradle/
+app/android/local.properties
+app/android/app/debug/
+app/android/app/profile/
+app/android/app/release/
+
+# iOS
+app/ios/Pods/
+app/ios/.symlinks/
+app/ios/Flutter/.last_build_id
+
+# Generated / temp analysis files
+app/analysis.txt
+app/analysis_output.txt
+app/analysis_result.txt
+
+# ─── IDE ─────────────────────────────────────────────────────────────────────
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+*.swp
+*.swo
+
+# ─── OS ──────────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# ─── Environment ─────────────────────────────────────────────────────────────
+.env
+*.env
+
+# ─── Archives ────────────────────────────────────────────────────────────────
+*.zip
+*.tar.gz

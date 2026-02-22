@@ -1,0 +1,61 @@
+name: finance_tracker
+description: Finance tracking app with on-device ML for smart categorization, anomaly detection, and spending forecasts.
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.11.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+
+  # State management
+  flutter_riverpod: ^2.6.1
+  riverpod_annotation: ^2.6.1
+
+  # Navigation
+  go_router: ^14.8.1
+
+  # Local storage
+  sqflite: ^2.4.1
+  path: ^1.9.1
+
+  # Charts
+  fl_chart: ^0.70.2
+
+  # ML inference
+  tflite_flutter: ^0.12.0
+
+  # File system
+  path_provider: ^2.1.5
+
+  # Utilities
+  uuid: ^4.5.1
+  intl: ^0.20.2
+  json_annotation: ^4.9.0
+  csv: ^6.0.0
+  google_fonts: ^8.0.1
+  shared_preferences: ^2.5.4
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  build_runner: ^2.4.14
+  riverpod_generator: ^2.6.3
+  json_serializable: ^6.9.4
+  flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.3
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/logo.png"
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/models/
+    - assets/data/
+    - assets/images/
