@@ -16,7 +16,7 @@ class AppDatabase {
 
     return openDatabase(
       path,
-      version: 4,
+      version: 5,
       onCreate: _onCreate,
       onUpgrade: _onUpgrade,
     );
@@ -161,6 +161,13 @@ class AppDatabase {
           updated_at TEXT NOT NULL
         )
       ''');
+    }
+    if (oldVersion < 5) {
+      // Income transactions should never be anomalies — the model was trained
+      // on expenses only. Clear any incorrectly flagged income transactions.
+      await db.execute(
+        "UPDATE transactions SET is_anomaly = 0, anomaly_score = NULL WHERE type = 'income'",
+      );
     }
   }
 }

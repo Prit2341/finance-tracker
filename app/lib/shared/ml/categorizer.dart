@@ -49,7 +49,7 @@ class Categorizer {
       await modelFile.writeAsBytes(modelData.buffer.asUint8List());
       debugPrint('Categorizer: step 3 - creating interpreter from ${modelFile.path}...');
       final interpreter = Interpreter.fromFile(modelFile);
-      debugPrint('Categorizer: step 4 - interpreter created, loading tokenizer...');
+      debugPrint('Categorizer: step 4 - interpreter created, loading tokenizer and config...');
 
       // Load tokenizer word index
       final tokenizerJson =
@@ -72,6 +72,8 @@ class Categorizer {
       final maxLen = config['max_len'] as int? ?? 10;
       final threshold =
           (config['confidence_threshold'] as num?)?.toDouble() ?? 0.8;
+
+      debugPrint('Categorizer: step 5 - ready (batch=32 fixed model).');
 
       return Categorizer._(
         interpreter: interpreter,
@@ -108,31 +110,62 @@ class Categorizer {
 
   /// Predict category for a merchant name.
   /// Returns top-3 predictions sorted by confidence.
+  // The TFLite model was exported with a fixed batch size of 32.
+  // Its output tensor is permanently [32, 12] — resizing doesn't change it.
+  // We must feed a full batch of 32 sequences (pad extras with zeros)
+  // and read only the first output row.
+  static const int _batchSize = 32;
+
   List<CategoryPrediction> predict(String merchantName) {
-    final input = [_tokenize(merchantName).map((e) => e.toDouble()).toList()];
-    final output = List.filled(_categories.length, 0.0).reshape([1, _categories.length]);
+    try {
+      // Skip inference when no words are recognized — the model outputs a fixed
+      // noise pattern (Entertainment ~77%) for all-OOV input, which is misleading.
+      final cleaned = merchantName
+          .toLowerCase()
+          .trim()
+          .replaceAll(RegExp(r'[^a-z0-9\s]'), ' ')
+          .replaceAll(RegExp(r'\s+'), ' ')
+          .trim();
+      final hasKnownWord = cleaned.split(' ').any((w) => _wordIndex.containsKey(w));
+      if (!hasKnownWord) return [];
 
-    _interpreter.run(input, output);
+      final tokens = _tokenize(merchantName).map((e) => e.toDouble()).toList();
+      final zeroPad = List.filled(_maxLen, 0.0);
+      final input = List.generate(
+        _batchSize,
+        (i) => i == 0 ? tokens : List<double>.from(zeroPad),
+      );
+      final output = List.generate(
+        _batchSize,
+        (_) => List.filled(_categories.length, 0.0),
+      );
 
-    final scores = (output[0] as List<double>);
+      _interpreter.run(input, output);
 
-    // Build predictions sorted by confidence
-    final predictions = <CategoryPrediction>[];
-    for (int i = 0; i < _categories.length; i++) {
-      final catName = _categories[i];
-      final category = TransactionCategory.values
-          .where((c) => c.name == catName)
-          .firstOrNull;
-      if (category != null) {
-        predictions.add(CategoryPrediction(
-          category: category,
-          confidence: scores[i],
-        ));
+      final scores = output[0];
+
+      // Build predictions sorted by confidence
+      final predictions = <CategoryPrediction>[];
+      for (int i = 0; i < _categories.length; i++) {
+        final catName = _categories[i];
+        final category = TransactionCategory.values
+            .where((c) => c.name == catName)
+            .firstOrNull;
+        if (category != null) {
+          predictions.add(CategoryPrediction(
+            category: category,
+            confidence: scores[i],
+          ));
+        }
       }
-    }
 
-    predictions.sort((a, b) => b.confidence.compareTo(a.confidence));
-    return predictions.take(3).toList();
+      predictions.sort((a, b) => b.confidence.compareTo(a.confidence));
+      debugPrint('Categorizer top-3 for "$merchantName": ${predictions.take(3).map((p) => '${p.category.name}=${(p.confidence * 100).toStringAsFixed(1)}%').join(', ')}');
+      return predictions.take(3).toList();
+    } catch (e) {
+      debugPrint('Categorizer.predict() failed: $e');
+      return [];
+    }
   }
 
   /// Returns true if the top prediction is above the confidence threshold.

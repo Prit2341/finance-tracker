@@ -143,14 +143,16 @@ class _AddTransactionPageState extends ConsumerState<AddTransactionPage> {
       accountId: _selectedAccountId,
     );
 
-    // Run anomaly detection before saving
-    final detector = ref.read(anomalyDetectorProvider).valueOrNull;
-    if (detector != null) {
-      final anomalyResult = detector.detect(transaction);
-      transaction = transaction.copyWith(
-        isAnomaly: anomalyResult.isAnomaly,
-        anomalyScore: anomalyResult.reconstructionError,
-      );
+    // Run anomaly detection before saving (expenses only — model was trained on expense data)
+    if (transaction.type == TransactionType.expense) {
+      final detector = ref.read(anomalyDetectorProvider).valueOrNull;
+      if (detector != null) {
+        final anomalyResult = detector.detect(transaction);
+        transaction = transaction.copyWith(
+          isAnomaly: anomalyResult.isAnomaly,
+          anomalyScore: anomalyResult.reconstructionError,
+        );
+      }
     }
 
     // Save or update transaction

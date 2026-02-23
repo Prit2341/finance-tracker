@@ -127,11 +127,7 @@ final appRouter = GoRouter(
       path: '/add-account',
       builder: (context, state) => const AddAccountPage(),
     ),
-    GoRoute(
-      parentNavigatorKey: _rootNavigatorKey,
-      path: '/settings',
-      builder: (context, state) => const SettingsPage(),
-    ),
+
     GoRoute(
       parentNavigatorKey: _rootNavigatorKey,
       path: '/subscriptions',
@@ -148,6 +144,11 @@ final appRouter = GoRouter(
       parentNavigatorKey: _rootNavigatorKey,
       path: '/budgets',
       builder: (context, state) => const BudgetsPage(),
+    ),
+    GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      path: '/settings',
+      builder: (context, state) => const SettingsPage(),
     ),
   ],
 );
